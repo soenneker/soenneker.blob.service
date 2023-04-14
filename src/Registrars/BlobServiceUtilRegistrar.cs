@@ -14,7 +14,7 @@ public static class BlobServiceUtilRegistrar
         services.TryAddSingleton<IBlobServiceUtil, BlobServiceUtil>();
     }
 
-    public static void AddBlobCopyAsScoped(this IServiceCollection services)
+    public static void AddBlobServiceUtilAsScoped(this IServiceCollection services)
     {
         services.TryAddScoped<IBlobServiceUtil, BlobServiceUtil>();
     }
