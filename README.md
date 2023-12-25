@@ -8,5 +8,5 @@
 ## Installation
 
 ```
-Install-Package Soenneker.Blob.Service
+dotnet add package Soenneker.Blob.Service
 ```
