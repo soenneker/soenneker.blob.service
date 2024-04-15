@@ -11,5 +11,5 @@ namespace Soenneker.Blob.Service.Abstract;
 public interface IBlobServiceUtil : IDisposable, IAsyncDisposable
 {
     [Pure]
-    ValueTask<BlobServiceClient> GetClient();
+    ValueTask<BlobServiceClient> Get();
 }

@@ -5,51 +5,47 @@ using Azure.Core.Pipeline;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
 using Soenneker.Blob.Service.Abstract;
+using Soenneker.Extensions.Configuration;
+using Soenneker.Extensions.ValueTask;
 using Soenneker.Utils.AsyncSingleton;
+using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Blob.Service;
 
 ///<inheritdoc cref="IBlobServiceUtil"/>
 public class BlobServiceUtil : IBlobServiceUtil
 {
+    private readonly IHttpClientCache _httpClientCache;
     private readonly AsyncSingleton<BlobServiceClient> _client;
 
-    public BlobServiceUtil(IConfiguration config)
+    public BlobServiceUtil(IConfiguration config, IHttpClientCache httpClientCache)
     {
-        _client = new AsyncSingleton<BlobServiceClient>(() =>
+        _httpClientCache = httpClientCache;
+        _client = new AsyncSingleton<BlobServiceClient>(async () =>
         {
-            var socketsHandler = new SocketsHttpHandler
-            {
-                PooledConnectionLifetime = TimeSpan.FromMinutes(10),
-                MaxConnectionsPerServer = 30
-            };
-
-            var httpClient = new HttpClient(socketsHandler);
+            HttpClient client = await httpClientCache.Get(nameof(BlobServiceUtil)).NoSync();
 
             var clientOptions = new BlobClientOptions
             {
-                Transport = new HttpClientTransport(httpClient)
+                Transport = new HttpClientTransport(client)
             };
 
-            var connectionString = config.GetValue<string>("Azure:Storage:Blob:ConnectionString");
-
-            if (connectionString == null)
-                throw new Exception("Azure:Storage:Blob:ConnectionString config is expected");
-
-            return new BlobServiceClient(connectionString!, clientOptions);
+            var connectionString = config.GetValueStrict<string>("Azure:Storage:Blob:ConnectionString");
+            return new BlobServiceClient(connectionString, clientOptions);
         });
     }
 
-    public ValueTask<BlobServiceClient> GetClient()
+    public ValueTask<BlobServiceClient> Get()
     {
         return _client.Get();
     }
 
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         GC.SuppressFinalize(this);
 
-        return _client.DisposeAsync();
+        await _client.DisposeAsync().NoSync();
+        await _httpClientCache.Remove(nameof(BlobServiceUtil)).NoSync();
     }
 
     public void Dispose()
@@ -57,5 +53,6 @@ public class BlobServiceUtil : IBlobServiceUtil
         GC.SuppressFinalize(this);
 
         _client.Dispose();
+        _httpClientCache.RemoveSync(nameof(BlobServiceUtil));
     }
 }
