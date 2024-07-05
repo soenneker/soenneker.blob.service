@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core.Pipeline;
 using Azure.Storage.Blobs;
@@ -21,9 +22,9 @@ public class BlobServiceUtil : IBlobServiceUtil
     public BlobServiceUtil(IConfiguration config, IHttpClientCache httpClientCache)
     {
         _httpClientCache = httpClientCache;
-        _client = new AsyncSingleton<BlobServiceClient>(async () =>
+        _client = new AsyncSingleton<BlobServiceClient>(async (token, _) =>
         {
-            HttpClient client = await httpClientCache.Get(nameof(BlobServiceUtil)).NoSync();
+            HttpClient client = await httpClientCache.Get(nameof(BlobServiceUtil), cancellationToken: token).NoSync();
 
             var clientOptions = new BlobClientOptions
             {
@@ -35,9 +36,9 @@ public class BlobServiceUtil : IBlobServiceUtil
         });
     }
 
-    public ValueTask<BlobServiceClient> Get()
+    public ValueTask<BlobServiceClient> Get(CancellationToken cancellationToken = default)
     {
-        return _client.Get();
+        return _client.Get(cancellationToken);
     }
 
     public async ValueTask DisposeAsync()
