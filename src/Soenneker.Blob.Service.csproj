@@ -39,6 +39,6 @@
         <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
         <PackageReference Include="Soenneker.Extensions.Configuration" Version="3.0.491" />
         <PackageReference Include="Soenneker.Utils.AsyncSingleton" Version="3.0.439" />
-        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="3.0.991" />
+        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="3.0.993" />
     </ItemGroup>
 </Project>
