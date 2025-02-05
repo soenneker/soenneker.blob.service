@@ -10,15 +10,17 @@ namespace Soenneker.Blob.Service.Registrars;
 /// </summary>
 public static class BlobServiceUtilRegistrar
 {
-    public static void AddBlobServiceUtilAsSingleton(this IServiceCollection services)
+    public static IServiceCollection AddBlobServiceUtilAsSingleton(this IServiceCollection services)
     {
-        services.AddHttpClientCache();
-        services.TryAddSingleton<IBlobServiceUtil, BlobServiceUtil>();
+        services.AddHttpClientCacheAsSingleton().TryAddSingleton<IBlobServiceUtil, BlobServiceUtil>();
+
+        return services;
     }
 
-    public static void AddBlobServiceUtilAsScoped(this IServiceCollection services)
+    public static IServiceCollection AddBlobServiceUtilAsScoped(this IServiceCollection services)
     {
-        services.AddHttpClientCache();
-        services.TryAddScoped<IBlobServiceUtil, BlobServiceUtil>();
+        services.AddHttpClientCacheAsSingleton().TryAddScoped<IBlobServiceUtil, BlobServiceUtil>();
+
+        return services;
     }
 }
