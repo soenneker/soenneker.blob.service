@@ -12,14 +12,16 @@ public static class BlobServiceUtilRegistrar
 {
     public static IServiceCollection AddBlobServiceUtilAsSingleton(this IServiceCollection services)
     {
-        services.AddHttpClientCacheAsSingleton().TryAddSingleton<IBlobServiceUtil, BlobServiceUtil>();
+        services.AddHttpClientCacheAsSingleton()
+                .TryAddSingleton<IBlobServiceUtil, BlobServiceUtil>();
 
         return services;
     }
 
     public static IServiceCollection AddBlobServiceUtilAsScoped(this IServiceCollection services)
     {
-        services.AddHttpClientCacheAsSingleton().TryAddScoped<IBlobServiceUtil, BlobServiceUtil>();
+        services.AddHttpClientCacheAsSingleton()
+                .TryAddScoped<IBlobServiceUtil, BlobServiceUtil>();
 
         return services;
     }
