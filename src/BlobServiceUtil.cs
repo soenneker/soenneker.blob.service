@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core.Pipeline;
@@ -14,7 +13,7 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 namespace Soenneker.Blob.Service;
 
 ///<inheritdoc cref="IBlobServiceUtil"/>
-public class BlobServiceUtil : IBlobServiceUtil
+public sealed class BlobServiceUtil : IBlobServiceUtil
 {
     private readonly IHttpClientCache _httpClientCache;
     private readonly AsyncSingleton<BlobServiceClient> _client;
@@ -43,16 +42,12 @@ public class BlobServiceUtil : IBlobServiceUtil
 
     public async ValueTask DisposeAsync()
     {
-        GC.SuppressFinalize(this);
-
         await _client.DisposeAsync().NoSync();
         await _httpClientCache.Remove(nameof(BlobServiceUtil)).NoSync();
     }
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
-
         _client.Dispose();
         _httpClientCache.RemoveSync(nameof(BlobServiceUtil));
     }
