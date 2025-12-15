@@ -38,6 +38,6 @@
         <None Include="..\icon.png" Pack="true" PackagePath="\" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.26.0" />
         <PackageReference Include="Soenneker.Extensions.Configuration" Version="4.0.745" />
-        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.1776" />
+        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.1779" />
     </ItemGroup>
 </Project>
