@@ -21,7 +21,7 @@ public sealed class BlobServiceUtil : IBlobServiceUtil
     public BlobServiceUtil(IConfiguration config, IHttpClientCache httpClientCache)
     {
         _httpClientCache = httpClientCache;
-        _client = new AsyncSingleton<BlobServiceClient>(async (token, _) =>
+        _client = new AsyncSingleton<BlobServiceClient>(async token =>
         {
             HttpClient client = await httpClientCache.Get(nameof(BlobServiceUtil), cancellationToken: token).NoSync();
 
