@@ -16,23 +16,27 @@ namespace Soenneker.Blob.Service;
 public sealed class BlobServiceUtil : IBlobServiceUtil
 {
     private readonly IHttpClientCache _httpClientCache;
+    private readonly IConfiguration _config;
     private readonly AsyncSingleton<BlobServiceClient> _client;
 
     public BlobServiceUtil(IConfiguration config, IHttpClientCache httpClientCache)
     {
+        _config = config;
         _httpClientCache = httpClientCache;
-        _client = new AsyncSingleton<BlobServiceClient>(async token =>
+        _client = new AsyncSingleton<BlobServiceClient>(CreateClient);
+    }
+
+    private async ValueTask<BlobServiceClient> CreateClient(CancellationToken token)
+    {
+        HttpClient client = await _httpClientCache.Get(nameof(BlobServiceUtil), cancellationToken: token).NoSync();
+
+        var clientOptions = new BlobClientOptions
         {
-            HttpClient client = await httpClientCache.Get(nameof(BlobServiceUtil), cancellationToken: token).NoSync();
+            Transport = new HttpClientTransport(client)
+        };
 
-            var clientOptions = new BlobClientOptions
-            {
-                Transport = new HttpClientTransport(client)
-            };
-
-            var connectionString = config.GetValueStrict<string>("Azure:Storage:Blob:ConnectionString");
-            return new BlobServiceClient(connectionString, clientOptions);
-        });
+        var connectionString = _config.GetValueStrict<string>("Azure:Storage:Blob:ConnectionString");
+        return new BlobServiceClient(connectionString, clientOptions);
     }
 
     public ValueTask<BlobServiceClient> Get(CancellationToken cancellationToken = default)
