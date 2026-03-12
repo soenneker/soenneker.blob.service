@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Blob.Service.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Blob.Service\Soenneker.Blob.Service.csproj" />
     </ItemGroup>
 
     <ItemGroup>
