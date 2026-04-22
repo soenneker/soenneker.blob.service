@@ -38,7 +38,7 @@ jobs:
         run: dotnet build test/Soenneker.Blob.Service.Tests/Soenneker.Blob.Service.Tests.csproj --configuration Release --no-restore --verbosity minimal
 
       - name: Test
-        run: dotnet test test/Soenneker.Blob.Service.Tests/Soenneker.Blob.Service.Tests.csproj --configuration Release --no-build --no-restore --verbosity minimal
+        run: dotnet test --project test/Soenneker.Blob.Service.Tests/Soenneker.Blob.Service.Tests.csproj --configuration Release --no-build --no-restore --verbosity minimal
 
       - name: Pack
         run: dotnet pack src/Soenneker.Blob.Service/Soenneker.Blob.Service.csproj --configuration Release --no-build --no-restore --output . --verbosity minimal
