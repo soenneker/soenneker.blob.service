@@ -11,6 +11,11 @@ namespace Soenneker.Blob.Service.Abstract;
 /// </summary>
 public interface IBlobServiceUtil : IDisposable, IAsyncDisposable
 {
+    /// <summary>
+    /// Gets the value.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task containing the result of the operation.</returns>
     [Pure]
     ValueTask<BlobServiceClient> Get(CancellationToken cancellationToken = default);
 }

@@ -44,12 +44,19 @@ public sealed class BlobServiceUtil : IBlobServiceUtil
         return _client.Get(cancellationToken);
     }
 
+    /// <summary>
+    /// Asynchronously releases resources used by the current instance.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public async ValueTask DisposeAsync()
     {
         await _client.DisposeAsync().NoSync();
         await _httpClientCache.Remove(nameof(BlobServiceUtil)).NoSync();
     }
 
+    /// <summary>
+    /// Releases resources used by the current instance.
+    /// </summary>
     public void Dispose()
     {
         _client.Dispose();
