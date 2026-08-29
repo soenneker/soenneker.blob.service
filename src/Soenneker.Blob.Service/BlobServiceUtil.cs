@@ -12,7 +12,7 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Blob.Service;
 
-///<inheritdoc cref="IBlobServiceUtil"/>
+/// <inheritdoc cref="IBlobServiceUtil"/>
 public sealed class BlobServiceUtil : IBlobServiceUtil
 {
     private readonly IHttpClientCache _httpClientCache;
