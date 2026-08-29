@@ -11,10 +11,10 @@ namespace Soenneker.Blob.Service.Registrars;
 public static class BlobServiceUtilRegistrar
 {
     /// <summary>
-    /// Adds blob service util as singleton.
+    /// Registers Blob Service Util with a singleton lifetime.
     /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="services">Service collection that receives the registration.</param>
+    /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddBlobServiceUtilAsSingleton(this IServiceCollection services)
     {
         services.AddHttpClientCacheAsSingleton()
@@ -24,10 +24,10 @@ public static class BlobServiceUtilRegistrar
     }
 
     /// <summary>
-    /// Adds blob service util as scoped.
+    /// Registers Blob Service Util with a scoped lifetime.
     /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="services">Service collection that receives the registration.</param>
+    /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddBlobServiceUtilAsScoped(this IServiceCollection services)
     {
         services.AddHttpClientCacheAsSingleton()
