@@ -6,7 +6,7 @@ using Soenneker.Utils.HttpClientCache.Registrar;
 namespace Soenneker.Blob.Service.Registrars;
 
 /// <summary>
-/// A utility library for Azure Blob storage copy operations
+/// Registers the Azure Blob service client utility.
 /// </summary>
 public static class BlobServiceUtilRegistrar
 {

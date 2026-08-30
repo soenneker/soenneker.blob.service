@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
@@ -7,15 +6,14 @@ using Azure.Storage.Blobs;
 namespace Soenneker.Blob.Service.Abstract;
 
 /// <summary>
-/// 
+/// Provides the configured Azure Blob Storage service client.
 /// </summary>
 public interface IBlobServiceUtil : IDisposable, IAsyncDisposable
 {
     /// <summary>
-    /// Returns the configured blob Service Client used by the blob service.
+    /// Gets the lazily created, cached service client.
     /// </summary>
-    /// <param name="cancellationToken">Token used to cancel the operation.</param>
-    /// <returns>A task whose result is the requested blob Service Client.</returns>
-    [Pure]
+    /// <param name="cancellationToken">Token used to cancel client initialization.</param>
+    /// <returns>The client owned by this utility instance.</returns>
     ValueTask<BlobServiceClient> Get(CancellationToken cancellationToken = default);
 }

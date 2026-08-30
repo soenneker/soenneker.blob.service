@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core.Pipeline;
@@ -18,6 +19,7 @@ public sealed class BlobServiceUtil : IBlobServiceUtil
     private readonly IHttpClientCache _httpClientCache;
     private readonly IConfiguration _config;
     private readonly AsyncSingleton<BlobServiceClient> _client;
+    private readonly string _httpClientCacheKey = $"{nameof(BlobServiceUtil)}:{Guid.NewGuid():N}";
 
     public BlobServiceUtil(IConfiguration config, IHttpClientCache httpClientCache)
     {
@@ -28,7 +30,7 @@ public sealed class BlobServiceUtil : IBlobServiceUtil
 
     private async ValueTask<BlobServiceClient> CreateClient(CancellationToken token)
     {
-        HttpClient client = await _httpClientCache.Get(nameof(BlobServiceUtil), cancellationToken: token).NoSync();
+        HttpClient client = await _httpClientCache.Get(_httpClientCacheKey, cancellationToken: token).NoSync();
 
         var clientOptions = new BlobClientOptions
         {
@@ -51,7 +53,7 @@ public sealed class BlobServiceUtil : IBlobServiceUtil
     public async ValueTask DisposeAsync()
     {
         await _client.DisposeAsync().NoSync();
-        await _httpClientCache.Remove(nameof(BlobServiceUtil)).NoSync();
+        await _httpClientCache.Remove(_httpClientCacheKey).NoSync();
     }
 
     /// <summary>
@@ -60,6 +62,6 @@ public sealed class BlobServiceUtil : IBlobServiceUtil
     public void Dispose()
     {
         _client.Dispose();
-        _httpClientCache.RemoveSync(nameof(BlobServiceUtil));
+        _httpClientCache.RemoveSync(_httpClientCacheKey);
     }
 }
