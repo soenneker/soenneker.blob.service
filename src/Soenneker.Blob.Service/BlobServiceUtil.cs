@@ -37,7 +37,7 @@ public sealed class BlobServiceUtil : IBlobServiceUtil
             Transport = new HttpClientTransport(client)
         };
 
-        var connectionString = _config.GetValueStrict<string>("Azure:Storage:Blob:ConnectionString");
+        var connectionString = _config.GetStringStrict("Azure:Storage:Blob:ConnectionString");
         return new BlobServiceClient(connectionString, clientOptions);
     }
 
